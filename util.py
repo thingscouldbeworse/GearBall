@@ -33,7 +33,7 @@ def color_sub_gear(color1, color2, text):
     color1 = COLORS[color1]
     color2 = COLORS[color2] + 10
 
-    return '\033['+ str(color2) +';'+ str(color1) +'m' + text + '\033[0m'
+    return '\033['+ str(color1) +';'+ str(color2) +'m' + text + '\033[0m'
 
 def color_piece(color, text):
     
