@@ -3,7 +3,21 @@ import util
 import sys
 
 our_ball = ball()
-state = our_ball.rows
-for item in state:
-    print(item)
+our_ball.output_ball()
+
+our_ball.horizontal_move('right', 'top', 'center')
+our_ball.textify_rows()
+our_ball.output_ball()
+
+our_ball.horizontal_move('right', 'top', 'center')
+our_ball.textify_rows()
+our_ball.output_ball()
+
+our_ball.horizontal_move('right', 'top', 'center')
+our_ball.textify_rows()
+our_ball.output_ball()
+
+our_ball.horizontal_move('right', 'top', 'center')
+our_ball.textify_rows()
+our_ball.output_ball()
 

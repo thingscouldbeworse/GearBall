@@ -1,4 +1,5 @@
 import util
+import copy
 
 class ball:
 
@@ -31,6 +32,8 @@ class ball:
 
     def textify_rows(self):
 
+        self.rows = []
+
         # face1 and gear1a
         self.rows.append("     " + self.gears['1a'].text)
         self.append_row_with_space(1)
@@ -62,9 +65,9 @@ class ball:
         self.rows.append("     " + self.gears['5b'].text)
 
         row1, row2, row3 = self.faces['face_6'].return_output_all()
-        self.rows.append("    " + row1)
-        self.rows.append("   " + self.gears['6b'].text + row2 + self.gears['6a'].text)
         self.rows.append("    " + row3)
+        self.rows.append("   " + self.gears['6b'].text + row2 + self.gears['6a'].text)
+        self.rows.append("    " + row1)
 
     def append_row_with_space(self, row_number):
 
@@ -73,6 +76,85 @@ class ball:
         self.rows.append("    " + row2)
         self.rows.append("    " + row3)
 
+    def output_ball(self):
+
+        for row in self.rows:
+            print(row)
+ 
+    def horizontal_move(self, direction, row, hold):
+        
+        print("executing a horizontal move to the " + direction + " on the " + row + " row while holding the " + hold + " row.")
+        # holding opposite moves: 
+        #   horizontal face equivalent rows switch (move two rotations)
+        #   horizontal face center rows move one face in <direction>
+        #   horizontal gears move 1 step in <direction> and change 1 in orientation (increment for right, decrement for left)
+        # holding center moves:
+        #   hold moves one face in opposite
+        #   row moves one face in <direction>
+        #   all horizontal equivalents move simmilarly
+        #   all horizontal gears stay in the same position and change 1 orientation
+        #   orientation follows up, left for decrement, right for increment
+
+        if hold == 'center':
+            if row == 'top':
+                if direction == 'left':
+                    move = 'left'
+                elif direction == 'right':
+                    move = 'right'
+            elif row == 'bottom':
+                if direction == 'left':
+                    move = 'right'
+                elif direction == 'right':
+                    move = 'left'
+        else:
+            move = hold + "_" + row + "_" + direction
+
+        if move == 'right':
+            # move top row around
+            temp_face = copy.deepcopy(self.faces['face_4'])
+            self.faces['face_4'] = move_row_pieces(self.faces['face_3'], self.faces['face_4'], 'top') 
+            temp_face2 = copy.deepcopy(self.faces['face_6'])
+            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'top')
+            temp_face = copy.deepcopy(self.faces['face_2'])
+            self.faces['face_2'] = move_row_pieces(temp_face2, self.faces['face_2'], 'top')
+            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'top')
+            # move bottom row around in opposite direction 
+            temp_face = copy.deepcopy(self.faces['face_2'])
+            self.faces['face_2'] = move_row_pieces(self.faces['face_3'], self.faces['face_2'], 'bottom') 
+            temp_face2 = copy.deepcopy(self.faces['face_6'])
+            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'bottom')
+            temp_face = copy.deepcopy(self.faces['face_4'])
+            self.faces['face_4'] = move_row_pieces(temp_face2, self.faces['face_4'], 'bottom')
+            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'bottom') 
+            # adjust gear orientations
+            self.gears['3a'].adjust_orientation(self.gears['3a'].orientation + 1)
+            self.gears['3b'].adjust_orientation(self.gears['3b'].orientation + 1)
+            self.gears['6a'].adjust_orientation(self.gears['6a'].orientation + 1)
+            self.gears['6b'].adjust_orientation(self.gears['6b'].orientation + 1)
+        elif move == 'left':
+            # move top row around
+            temp_face = copy.deepcopy(self.faces['face_2'])
+            self.faces['face_2'] = move_row_pieces(self.faces['face_3'], self.faces['face_2'], 'top') 
+            temp_face2 = copy.deepcopy(self.faces['face_6'])
+            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'top')
+            temp_face = copy.deepcopy(self.faces['face_4'])
+            self.faces['face_4'] = move_row_pieces(temp_face2, self.faces['face_4'], 'top')
+            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'top')
+            # move bottom row around in opposite direction 
+            temp_face = copy.deepcopy(self.faces['face_4'])
+            self.faces['face_4'] = move_row_pieces(self.faces['face_3'], self.faces['face_4'], 'bottom') 
+            temp_face2 = copy.deepcopy(self.faces['face_6'])
+            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'bottom')
+            temp_face = copy.deepcopy(self.faces['face_2'])
+            self.faces['face_2'] = move_row_pieces(temp_face2, self.faces['face_2'], 'bottom')
+            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'bottom') 
+            # adjust gear orientations
+            self.gears['3a'].adjust_orientation(self.gears['3a'].orientation - 1)
+            self.gears['3b'].adjust_orientation(self.gears['3b'].orientation - 1)
+            self.gears['6a'].adjust_orientation(self.gears['6a'].orientation - 1)
+            self.gears['6b'].adjust_orientation(self.gears['6b'].orientation - 1)
+        elif 
+              
 
 class face:
 
@@ -120,7 +202,6 @@ class face:
 
         return [top_row, middle_row, bottom_row]
 
-
 class piece:
 
     text = '▆'
@@ -128,6 +209,10 @@ class piece:
         self.color = color
         self.type = style
         self.text = util.color_sub(color, self.text)
+
+    def change_color(self, new_color):
+        self.text = util.color_sub(new_color, self.text)
+        self.color = new_color
 
 class gear:
 
@@ -138,3 +223,33 @@ class gear:
         self.color2 = color2
         self.orientation = 1
         self.text = util.color_sub_gear(color1, color2, str(self.orientation))
+    
+    def adjust_orientation(self, new_orientation):
+        if new_orientation == 0:
+            new_orientation = 6
+        elif new_orientation == 7:
+            new_orientation = 1
+        self.orientation = new_orientation
+        self.text = util.color_sub_gear(self.color1, self.color2, str(new_orientation))
+
+def vertical_move(ball, direction, row, hold):
+    
+    print("executing a vertical move " + direction + " on the " + row + " row while holding the " + hold + " row.")
+
+def move_row_pieces(first, second, row):
+
+    if row == 'center':
+        piece1 = 'left'
+        piece2 = 'center'
+        piece3 = 'right'
+    else:
+        piece1 = row + '_left'
+        piece2 = row
+        piece3 = row + '_right'
+ 
+    second.pieces[piece1].change_color(first.pieces[piece1].color)
+    second.pieces[piece2].change_color(first.pieces[piece2].color)
+    second.pieces[piece3].change_color(first.pieces[piece3].color)
+
+    return second
+

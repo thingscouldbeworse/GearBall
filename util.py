@@ -44,5 +44,4 @@ def color_face(face):
     
     pieces = face.return_all()
     text = "" 
-    
-   
+
