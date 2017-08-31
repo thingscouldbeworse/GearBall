@@ -111,50 +111,52 @@ class ball:
 
         if move == 'right':
             # move top row around
-            temp_face = copy.deepcopy(self.faces['face_4'])
-            self.faces['face_4'] = move_row_pieces(self.faces['face_3'], self.faces['face_4'], 'top') 
-            temp_face2 = copy.deepcopy(self.faces['face_6'])
-            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'top')
-            temp_face = copy.deepcopy(self.faces['face_2'])
-            self.faces['face_2'] = move_row_pieces(temp_face2, self.faces['face_2'], 'top')
-            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'top')
+            self.full_row_move_horizontal('top', 'right')
+
             # move bottom row around in opposite direction 
-            temp_face = copy.deepcopy(self.faces['face_2'])
-            self.faces['face_2'] = move_row_pieces(self.faces['face_3'], self.faces['face_2'], 'bottom') 
-            temp_face2 = copy.deepcopy(self.faces['face_6'])
-            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'bottom')
-            temp_face = copy.deepcopy(self.faces['face_4'])
-            self.faces['face_4'] = move_row_pieces(temp_face2, self.faces['face_4'], 'bottom')
-            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'bottom') 
+            self.full_row_move_horizontal('bottom', 'left')
+
             # adjust gear orientations
-            self.gears['3a'].adjust_orientation(self.gears['3a'].orientation + 1)
-            self.gears['3b'].adjust_orientation(self.gears['3b'].orientation + 1)
-            self.gears['6a'].adjust_orientation(self.gears['6a'].orientation + 1)
-            self.gears['6b'].adjust_orientation(self.gears['6b'].orientation + 1)
+            self.full_gear_update(1, 'x')
+
         elif move == 'left':
             # move top row around
-            temp_face = copy.deepcopy(self.faces['face_2'])
-            self.faces['face_2'] = move_row_pieces(self.faces['face_3'], self.faces['face_2'], 'top') 
-            temp_face2 = copy.deepcopy(self.faces['face_6'])
-            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'top')
-            temp_face = copy.deepcopy(self.faces['face_4'])
-            self.faces['face_4'] = move_row_pieces(temp_face2, self.faces['face_4'], 'top')
-            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'top')
+            self.full_row_move_horizontal('top', 'left')
+
             # move bottom row around in opposite direction 
-            temp_face = copy.deepcopy(self.faces['face_4'])
-            self.faces['face_4'] = move_row_pieces(self.faces['face_3'], self.faces['face_4'], 'bottom') 
-            temp_face2 = copy.deepcopy(self.faces['face_6'])
-            self.faces['face_6'] = move_row_pieces(temp_face, self.faces['face_6'], 'bottom')
-            temp_face = copy.deepcopy(self.faces['face_2'])
-            self.faces['face_2'] = move_row_pieces(temp_face2, self.faces['face_2'], 'bottom')
-            self.faces['face_3'] = move_row_pieces(temp_face, self.faces['face_3'], 'bottom') 
+            self.full_row_move_horizontal('bottom', 'right')
             # adjust gear orientations
-            self.gears['3a'].adjust_orientation(self.gears['3a'].orientation - 1)
-            self.gears['3b'].adjust_orientation(self.gears['3b'].orientation - 1)
-            self.gears['6a'].adjust_orientation(self.gears['6a'].orientation - 1)
-            self.gears['6b'].adjust_orientation(self.gears['6b'].orientation - 1)
-        elif 
-              
+            self.full_gear_update(-1, 'x')
+         
+
+    def full_row_move_horizontal(self, row, direction):
+        face_list = [
+                'face_3',
+                'face_2',
+                'face_6',
+                'face_4'
+                ]
+        if direction == 'left':
+            face_list = list(reversed(face_list))
+
+        self.faces['temp_face'] = copy.deepcopy(self.faces[face_list[0]])
+        face_list.append('temp_face')
+        
+        for i in range(0,4):
+            self.faces[face_list[i]] = move_row_pieces(self.faces[face_list[i+1]], self.faces[face_list[i]], row) 
+       
+        self.faces.pop('temp_face', None)
+
+    def full_gear_update(self, increment, axis):
+        gear_dict = {
+                    'x': ['3a', '3b', '6a', '6b'],
+                    'y': ['2a', '2b', '4a', '4b'],
+                    'z': ['1a', '1b', '5a', '5b']
+                    }
+        
+        gear_list = gear_dict[axis]
+        for i in range(0,4):
+            self.gears[gear_list[i]].adjust_orientation(self.gears[gear_list[i]].orientation + increment)
 
 class face:
 
