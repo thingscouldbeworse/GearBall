@@ -81,62 +81,60 @@ class ball:
         for row in self.rows:
             print(row)
  
-    def horizontal_move(self, direction, row, hold):
+    def move(self, row, direction, hold):
         
-        print("executing a horizontal move to the " + direction + " on the " + row + " row while holding the " + hold + " row.")
-        # holding opposite moves: 
-        #   horizontal face equivalent rows switch (move two rotations)
-        #   horizontal face center rows move one face in <direction>
-        #   horizontal gears move 1 step in <direction> and change 1 in orientation (increment for right, decrement for left)
-        # holding center moves:
-        #   hold moves one face in opposite
-        #   row moves one face in <direction>
-        #   all horizontal equivalents move simmilarly
-        #   all horizontal gears stay in the same position and change 1 orientation
-        #   orientation follows up, left for decrement, right for increment
-
+        print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
         if hold == 'center':
+            if direction == 'right':
+                opposite_direction = 'left'
+            elif direction == 'left':
+                opposite_direction = 'right'
+            elif direction == 'up':
+                opposite_direction = 'down'
+            elif direction == 'down':
+                opposite_direction = 'up'
+            
             if row == 'top':
-                if direction == 'left':
-                    move = 'left'
-                elif direction == 'right':
-                    move = 'right'
+                real_direction = direction
+                opposite_row = 'bottom'
             elif row == 'bottom':
-                if direction == 'left':
-                    move = 'right'
-                elif direction == 'right':
-                    move = 'left'
+                real_direction = opposite_direction
+                opposite_row = 'top'
+            elif row == 'left':
+                real_direction = direction
+                opposite_row = 'right'
+            elif row == 'right':
+                real_direction = opposite_direction
+                opposite_row = 'left'
         else:
             move = hold + "_" + row + "_" + direction
 
-        if move == 'right':
-            # move top row around
-            self.full_row_move_horizontal('top', 'right')
+        if real_direction == 'right' or real_direction == 'up':
+            increment = 1
+        elif real_direction == 'left' or real_direction == 'down':
+            increment = -1
 
-            # move bottom row around in opposite direction 
-            self.full_row_move_horizontal('bottom', 'left')
-
-            # adjust gear orientations
-            self.full_gear_update(1, 'x')
-
-        elif move == 'left':
-            # move top row around
-            self.full_row_move_horizontal('top', 'left')
-
-            # move bottom row around in opposite direction 
-            self.full_row_move_horizontal('bottom', 'right')
-            # adjust gear orientations
-            self.full_gear_update(-1, 'x')
+        if real_direction == 'right' or real_direction == 'left':
+            self.full_row_move('top', real_direction)
+            self.full_row_move('bottom', opposite_direction)
+            self.full_gear_update(increment, 'x')
+        elif real_direction == 'up' or real_direction == 'down':
+            self.full_row_move('left', real_direction)
+            self.full_row_move('right', opposite_direction)
+            self.full_gear_update(increment, 'z')
          
 
-    def full_row_move_horizontal(self, row, direction):
-        face_list = [
-                'face_3',
-                'face_2',
-                'face_6',
-                'face_4'
-                ]
-        if direction == 'left':
+    def full_row_move(self, row, direction):
+        face_dict = {
+                    'x': ['face_3', 'face_2', 'face_6', 'face_4'],
+                    'z': ['face_3', 'face_5', 'face_6', 'face_1']
+                    }
+        if direction == 'left' or direction == 'right':
+            face_list = face_dict['x']
+        elif direction == 'up' or direction == 'down':
+            face_list = face_dict['z']
+                                
+        if direction == 'left' or direction == 'down':
             face_list = list(reversed(face_list))
 
         self.faces['temp_face'] = copy.deepcopy(self.faces[face_list[0]])
@@ -244,10 +242,14 @@ def move_row_pieces(first, second, row):
         piece1 = 'left'
         piece2 = 'center'
         piece3 = 'right'
-    else:
+    elif row == 'top' or row == 'bottom':
         piece1 = row + '_left'
         piece2 = row
         piece3 = row + '_right'
+    elif row == 'left' or row == 'right':
+        piece1 = 'bottom_' + row
+        piece2 = row
+        piece3 = 'top_' + row
  
     second.pieces[piece1].change_color(first.pieces[piece1].color)
     second.pieces[piece2].change_color(first.pieces[piece2].color)

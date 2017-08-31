@@ -5,19 +5,10 @@ import sys
 our_ball = ball()
 our_ball.output_ball()
 
-our_ball.horizontal_move('right', 'top', 'center')
+our_ball.move('left', 'up', 'center')
 our_ball.textify_rows()
 our_ball.output_ball()
 
-our_ball.horizontal_move('right', 'top', 'center')
+our_ball.move('top', 'right', 'center')
 our_ball.textify_rows()
 our_ball.output_ball()
-
-our_ball.horizontal_move('right', 'top', 'center')
-our_ball.textify_rows()
-our_ball.output_ball()
-
-our_ball.horizontal_move('right', 'top', 'center')
-our_ball.textify_rows()
-our_ball.output_ball()
-
