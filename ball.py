@@ -65,9 +65,9 @@ class ball:
         self.rows.append("     " + self.gears['5b'].text)
 
         row1, row2, row3 = self.faces['face_6'].return_output_all()
-        self.rows.append("    " + row3)
-        self.rows.append("   " + self.gears['6b'].text + row2 + self.gears['6a'].text)
         self.rows.append("    " + row1)
+        self.rows.append("   " + self.gears['6b'].text + row2 + self.gears['6a'].text)
+        self.rows.append("    " + row3)
 
     def append_row_with_space(self, row_number):
 
@@ -78,6 +78,7 @@ class ball:
 
     def output_ball(self):
 
+        self.textify_rows()
         for row in self.rows:
             print(row)
  
@@ -139,6 +140,9 @@ class ball:
                     }
         if direction == 'left' or direction == 'right':
             face_list = face_dict['x']
+            # inflect face 6 
+            self.faces['face_6'].inflect()
+
         elif direction == 'up' or direction == 'down':
             face_list = face_dict['z']
                                 
@@ -152,6 +156,10 @@ class ball:
             self.faces[face_list[i]] = move_row_pieces(self.faces[face_list[i+1]], self.faces[face_list[i]], row) 
        
         self.faces.pop('temp_face', None)
+
+        if direction == 'left' or direction == 'right':
+            # inflect face_6 back 
+            self.faces['face_6'].inflect()
 
     def full_gear_update(self, increment, axis):
         gear_dict = {
@@ -174,14 +182,26 @@ class ball:
             face.pieces['top_right'] = copy.deepcopy(face.pieces['bottom_right'])
             face.pieces['bottom_right'] = copy.deepcopy(face.pieces['bottom_left'])
             face.pieces['bottom_left'] = copy.deepcopy(face.pieces['top_left'])
-            face.pieces['top_left'] = temp_piece
+            face.pieces['top_left'] = copy.deepcopy(temp_piece)
+            temp_piece = copy.deepcopy(face.pieces['right'])
+            face.pieces['right'] = copy.deepcopy(face.pieces['bottom'])
+            face.pieces['bottom'] = copy.deepcopy(face.pieces['left'])
+            face.pieces['left'] = copy.deepcopy(face.pieces['top'])
+            face.pieces['top'] = copy.deepcopy(temp_piece)
         # clockwise
         elif direction == 'left' or direction == 'down':
             temp_piece = copy.deepcopy(face.pieces['top_right'])
             face.pieces['top_right'] = copy.deepcopy(face.pieces['top_left'])
             face.pieces['top_left'] = copy.deepcopy(face.pieces['bottom_left'])
             face.pieces['bottom_left'] = copy.deepcopy(face.pieces['bottom_right'])
-            face.pieces['bottom_right'] = temp_piece
+            face.pieces['bottom_right'] = copy.deepcopy(temp_piece)
+            temp_pieces = copy.deepcopy(face.pieces['right'])
+            face.pieces['right'] = copy.deepcopy(face.pieces['top'])
+            face.pieces['top'] = copy.deepcopy(face.pieces['left'])
+            face.pieces['left'] = copy.deepcopy(face.pieces['bottom'])
+            face.pieces['bottom'] = copy.deepcopy(temp_piece)
+
+
 
 
 
@@ -231,6 +251,21 @@ class face:
         bottom_row  = self.pieces['bottom_left'].text + self.pieces['bottom'].text + self.pieces['bottom_right'].text
 
         return [top_row, middle_row, bottom_row]
+
+    def inflect(self):
+        temp_piece = copy.deepcopy(self.pieces['top_right'])
+        self.pieces['top_right'] = copy.deepcopy(self.pieces['bottom_left'])
+        self.pieces['bottom_left'] = copy.deepcopy(temp_piece)
+        temp_piece = copy.deepcopy(self.pieces['top_left'])
+        self.pieces['top_left'] = copy.deepcopy(self.pieces['bottom_right'])
+        self.pieces['bottom_right'] = copy.deepcopy(temp_piece)
+        temp_piece = copy.deepcopy(self.pieces['top'])
+        self.pieces['top'] = copy.deepcopy(self.pieces['bottom'])
+        self.pieces['bottom'] = copy.deepcopy(temp_piece)
+        temp_piece = copy.deepcopy(self.pieces['left'])
+        self.pieces['left'] = copy.deepcopy(self.pieces['right'])
+        self.pieces['right'] = copy.deepcopy(temp_piece)
+
 
 class piece:
 
