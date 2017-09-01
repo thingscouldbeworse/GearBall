@@ -116,11 +116,19 @@ class ball:
 
         if real_direction == 'right' or real_direction == 'left':
             self.full_row_move('top', real_direction)
+            self.rotate_edge('1', real_direction)
+            
             self.full_row_move('bottom', opposite_direction)
+            self.rotate_edge('5', real_direction)
+            
             self.full_gear_update(increment, 'x')
         elif real_direction == 'up' or real_direction == 'down':
             self.full_row_move('left', real_direction)
+            self.rotate_edge('2', real_direction)
+
             self.full_row_move('right', opposite_direction)
+            self.rotate_edge('4', real_direction)
+
             self.full_gear_update(increment, 'z')
          
 
@@ -155,6 +163,28 @@ class ball:
         gear_list = gear_dict[axis]
         for i in range(0,4):
             self.gears[gear_list[i]].adjust_orientation(self.gears[gear_list[i]].orientation + increment)
+
+    def rotate_edge(self, edge, direction):
+        
+        face = self.faces['face_' + edge]
+        
+        # counter-clockwise
+        if direction == 'right' or direction == 'up':
+            temp_piece = copy.deepcopy(face.pieces['top_right'])
+            face.pieces['top_right'] = copy.deepcopy(face.pieces['bottom_right'])
+            face.pieces['bottom_right'] = copy.deepcopy(face.pieces['bottom_left'])
+            face.pieces['bottom_left'] = copy.deepcopy(face.pieces['top_left'])
+            face.pieces['top_left'] = temp_piece
+        # clockwise
+        elif direction == 'left' or direction == 'down':
+            temp_piece = copy.deepcopy(face.pieces['top_right'])
+            face.pieces['top_right'] = copy.deepcopy(face.pieces['top_left'])
+            face.pieces['top_left'] = copy.deepcopy(face.pieces['bottom_left'])
+            face.pieces['bottom_left'] = copy.deepcopy(face.pieces['bottom_right'])
+            face.pieces['bottom_right'] = temp_piece
+
+
+
 
 class face:
 
