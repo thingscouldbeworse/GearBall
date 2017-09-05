@@ -175,14 +175,37 @@ class ball:
     def rotate_edge(self, edge, direction):
         
         face = self.faces['face_' + edge]
+        gear_dict = { 
+                    '1': ['1a', '4a', '1b', '2a'],
+                    '5': ['5a', '4b', '5b', '2b'],
+                    '2': ['2a', '3b', '2b', '6b'],
+                    '4': ['4a', '6a', '4b', '3a']
+                    }
+        # gears
         
+        gear_list = gear_dict[edge]
+        
+        if direction == 'left' or direction == 'down':
+            gear_list = list(reversed(gear_list))
+        
+        temp_gear = copy.deepcopy(self.gears[gear_list[0]])
+        self.gears['temp'] = temp_gear
+        gear_list.append('temp')
+        
+        for i in range(0,4):
+            self.gears[gear_list[i]] = copy.deepcopy(self.gears[gear_list[i+1]])
+
+        self.gears.pop('temp', None)
+   
         # counter-clockwise
         if direction == 'right' or direction == 'up':
+            # corners
             temp_piece = copy.deepcopy(face.pieces['top_right'])
             face.pieces['top_right'] = copy.deepcopy(face.pieces['bottom_right'])
             face.pieces['bottom_right'] = copy.deepcopy(face.pieces['bottom_left'])
             face.pieces['bottom_left'] = copy.deepcopy(face.pieces['top_left'])
             face.pieces['top_left'] = copy.deepcopy(temp_piece)
+            # inner pieces
             temp_piece = copy.deepcopy(face.pieces['right'])
             face.pieces['right'] = copy.deepcopy(face.pieces['bottom'])
             face.pieces['bottom'] = copy.deepcopy(face.pieces['left'])
@@ -190,19 +213,18 @@ class ball:
             face.pieces['top'] = copy.deepcopy(temp_piece)
         # clockwise
         elif direction == 'left' or direction == 'down':
+            # corners
             temp_piece = copy.deepcopy(face.pieces['top_right'])
             face.pieces['top_right'] = copy.deepcopy(face.pieces['top_left'])
             face.pieces['top_left'] = copy.deepcopy(face.pieces['bottom_left'])
             face.pieces['bottom_left'] = copy.deepcopy(face.pieces['bottom_right'])
             face.pieces['bottom_right'] = copy.deepcopy(temp_piece)
+            # inner pieces
             temp_pieces = copy.deepcopy(face.pieces['right'])
             face.pieces['right'] = copy.deepcopy(face.pieces['top'])
             face.pieces['top'] = copy.deepcopy(face.pieces['left'])
             face.pieces['left'] = copy.deepcopy(face.pieces['bottom'])
             face.pieces['bottom'] = copy.deepcopy(temp_piece)
-
-
-
 
 
 
