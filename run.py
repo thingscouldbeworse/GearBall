@@ -9,6 +9,6 @@ our_ball.output_ball()
 our_ball.move('right', 'up', 'left')
 our_ball.output_ball()
 
-our_ball.move('right', 'up', 'left')
+our_ball.move('right', 'up', 'center')
 our_ball.output_ball()
 

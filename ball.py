@@ -102,12 +102,14 @@ class ball:
                 opposite_row = 'bottom'
             elif row == 'bottom':
                 real_direction = opposite_direction
+                opposite_direction = direction
                 opposite_row = 'top'
             elif row == 'left':
                 real_direction = direction
                 opposite_row = 'right'
             elif row == 'right':
                 real_direction = opposite_direction
+                opposite_direction = direction
                 opposite_row = 'left'
         else:
             move = 'double'
@@ -121,12 +123,14 @@ class ball:
             elif row == 'bottom':
                 self.rotate_edge('5', direction)
                 self.rotate_edge('5', direction)
+                increment = increment * -1
             elif row == 'left':
                 self.rotate_edge('2', direction)
                 self.rotate_edge('2', direction)
             elif row == 'right':
                 self.rotate_edge('4', direction)
                 self.rotate_edge('4', direction)
+                increment = increment * -1
 
             # two moves for the row because we're not holding center
             self.full_row_move(row, direction)
@@ -138,7 +142,6 @@ class ball:
                 self.full_gear_update(increment, 'z')
 
             self.full_row_move('center', direction)
-
 
         if real_direction == 'right' or real_direction == 'up':
             increment = 1
@@ -170,15 +173,17 @@ class ball:
                     }
         gear_dict = {
                     'x': ['3b', '6b', '6a', '3a'],
-                    'z': ['1a', '5b', '5a', '1b']
+                    'z': ['1b', '5a', '5b', '1a']
                     }
         if direction == 'left' or direction == 'right':
-            face_list = face_dict['x']
+            axis = 'x'
+            face_list = face_dict[axis]
             # inflect face 6 
             self.faces['face_6'].inflect()
 
         elif direction == 'up' or direction == 'down':
-            face_list = face_dict['z']
+            axis = 'z'
+            face_list = face_dict[axis]
                                 
         if direction == 'left' or direction == 'down':
             face_list = list(reversed(face_list))
@@ -187,7 +192,7 @@ class ball:
         face_list.append('temp_face')
         
         for i in range(0,4):
-            self.faces[face_list[i]] = move_row_pieces(self.faces[face_list[i+1]], self.faces[face_list[i]], row) 
+            self.faces[face_list[i]] = move_row_pieces(self.faces[face_list[i+1]], self.faces[face_list[i]], row, axis) 
        
         self.faces.pop('temp_face', None)
         
@@ -280,9 +285,13 @@ class ball:
             face.pieces['left'] = copy.deepcopy(face.pieces['bottom'])
             face.pieces['bottom'] = copy.deepcopy(temp_piece)
 
-def move_row_pieces(first, second, row):
+def move_row_pieces(first, second, row, axis = 'x'):
 
-    if row == 'center':
+    if axis == 'z' and row == 'center':
+        piece1 = 'bottom'
+        piece2 = 'center'
+        piece3 = 'top'
+    elif axis == 'x' and row == 'center':
         piece1 = 'left'
         piece2 = 'center'
         piece3 = 'right'
