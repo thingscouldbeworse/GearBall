@@ -86,6 +86,7 @@ class ball:
     def move(self, row, direction, hold):
         
         print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
+        real_direction = 'none'
         if hold == 'center':
             if direction == 'right':
                 opposite_direction = 'left'
@@ -109,7 +110,35 @@ class ball:
                 real_direction = opposite_direction
                 opposite_row = 'left'
         else:
-            move = hold + "_" + row + "_" + direction
+            move = 'double'
+            if direction == 'right' or direction == 'up':
+                increment = 1
+            elif direction == 'left' or direction == 'down':
+                increment = -1
+            if row == 'top':
+                self.rotate_edge('1', direction)
+                self.rotate_edge('1', direction)
+            elif row == 'bottom':
+                self.rotate_edge('5', direction)
+                self.rotate_edge('5', direction)
+            elif row == 'left':
+                self.rotate_edge('2', direction)
+                self.rotate_edge('2', direction)
+            elif row == 'right':
+                self.rotate_edge('4', direction)
+                self.rotate_edge('4', direction)
+
+            # two moves for the row because we're not holding center
+            self.full_row_move(row, direction)
+            self.full_row_move(row, direction)
+
+            if direction == 'right' or direction == 'left': 
+                self.full_gear_update(increment, 'x')
+            elif direction == 'up' or direction == 'down':
+                self.full_gear_update(increment, 'z')
+
+            self.full_row_move('center', direction)
+
 
         if real_direction == 'right' or real_direction == 'up':
             increment = 1
@@ -139,6 +168,10 @@ class ball:
                     'x': ['face_3', 'face_2', 'face_6', 'face_4'],
                     'z': ['face_3', 'face_5', 'face_6', 'face_1']
                     }
+        gear_dict = {
+                    'x': ['3b', '6b', '6a', '3a'],
+                    'z': ['1a', '5b', '5a', '1b']
+                    }
         if direction == 'left' or direction == 'right':
             face_list = face_dict['x']
             # inflect face 6 
@@ -157,10 +190,30 @@ class ball:
             self.faces[face_list[i]] = move_row_pieces(self.faces[face_list[i+1]], self.faces[face_list[i]], row) 
        
         self.faces.pop('temp_face', None)
+        
+        if row == 'center':
+            # also do gear position updates for center moves
+            if direction == 'right':
+                gear_list = gear_dict['x']
+            elif direction == 'right':
+                gear_list = list(reversed(gear_dict['x']))
+            elif direction == 'up':
+                gear_list = gear_dict['z']
+            elif direction == 'down':
+                gear_list = list(reversed(gear_dict['z']))
+
+            temp_gear = copy.deepcopy(self.gears[gear_list[0]])
+            self.gears['temp_gear'] = temp_gear
+            gear_list.append('temp_gear')
+            
+            for i in range(0, 4):
+                self.gears[gear_list[i]] = copy.deepcopy(self.gears[gear_list[i+1]])
+            self.gears.pop('temp', None)
 
         if direction == 'left' or direction == 'right':
             # inflect face_6 back 
             self.faces['face_6'].inflect()
+
 
     def full_gear_update(self, increment, axis):
         gear_dict = {
