@@ -25,6 +25,7 @@ The central face (the one at the center of the "cross" formed by unfolding the g
 
 A solved (or untouched) gearball will look like this:
 
+```
      1
     ▆▆▆
     ▆▆▆
@@ -41,7 +42,7 @@ A solved (or untouched) gearball will look like this:
     ▆▆▆
    1▆▆▆1
     ▆▆▆
-
+```
 
 ## Data Structure
 
