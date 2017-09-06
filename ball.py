@@ -200,7 +200,7 @@ class ball:
             # also do gear position updates for center moves
             if direction == 'right':
                 gear_list = gear_dict['x']
-            elif direction == 'right':
+            elif direction == 'left':
                 gear_list = list(reversed(gear_dict['x']))
             elif direction == 'up':
                 gear_list = gear_dict['z']
@@ -279,7 +279,7 @@ class ball:
             face.pieces['bottom_left'] = copy.deepcopy(face.pieces['bottom_right'])
             face.pieces['bottom_right'] = copy.deepcopy(temp_piece)
             # inner pieces
-            temp_pieces = copy.deepcopy(face.pieces['right'])
+            temp_piece = copy.deepcopy(face.pieces['right'])
             face.pieces['right'] = copy.deepcopy(face.pieces['top'])
             face.pieces['top'] = copy.deepcopy(face.pieces['left'])
             face.pieces['left'] = copy.deepcopy(face.pieces['bottom'])

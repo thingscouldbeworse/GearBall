@@ -92,7 +92,3 @@ class gear:
         self.orientation = new_orientation
         self.text = util.color_sub_gear(self.color1, self.color2, str(new_orientation))
 
-def vertical_move(ball, direction, row, hold):
-    
-    print("executing a vertical move " + direction + " on the " + row + " row while holding the " + hold + " row.")
-
