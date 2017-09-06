@@ -60,6 +60,28 @@ def randomize(num_moves):
         our_ball.output_ball() 
 
 if len(sys.argv) < 2:
-    print("Usage: 'python run.py [number of random moves to generate]")
-else:
+    print("Usage: ")
+    print("         python run.py [number of random moves to generate]")
+    print("         python run.py [row to move] [direction] [row to hold]")
+elif len(sys.argv) == 2:
     randomize(int(sys.argv[1]))
+elif len(sys.argv) > 2:
+    our_ball = ball()
+    our_ball.output_ball()
+    
+    done = False
+    row = sys.argv[1]
+    direction = sys.argv[2]
+    hold = sys.argv[3]
+
+    while not done:
+        our_ball.move(row, direction, hold)
+        our_ball.output_ball()
+        move = input("Next move: ")
+        if len(sys.argv) > 4:
+            done = True
+        if move == 'quit' or move == 'q':
+            done = True
+        else:
+            row, direction, hold = list(move.split(' '))
+
