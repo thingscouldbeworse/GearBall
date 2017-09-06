@@ -4,10 +4,25 @@
 
 invoke the gear ball randomizer with 
 
-```python
+```zsh
 python run.py [number]
 ```
 where [number] is the number of moves you want the randomizer to take. Each moven taken will print the steps taken (row moved, direction moved in, row held) and the state of the gear ball after the move.
+
+If you wish to make a single move on the gearball invoke `run.py` via
+```zsh
+python run.py [row to move] [direction to move in] [row to hold] [q to quit]
+```
+
+For example, to execute a left twist on the top row while moving the bottom row in the opposite direction (the center row does not move), you would use
+
+```zsh
+python run.py top left center q
+```
+
+If you want to continue to make moves on the gear ball after your initial move do not append 'q' to the end of your arguments. Continue to move the gear ball via the same command structure, `[row] [direction] [hold]`. Type `quit` or `q` to exit the gearball program.
+
+The state of the gearball will be output to the screen after each move.
 
 ## GUI
 
