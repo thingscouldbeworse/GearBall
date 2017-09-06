@@ -88,14 +88,8 @@ class ball:
         print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
         real_direction = 'none'
         if hold == 'center':
-            if direction == 'right':
-                opposite_direction = 'left'
-            elif direction == 'left':
-                opposite_direction = 'right'
-            elif direction == 'up':
-                opposite_direction = 'down'
-            elif direction == 'down':
-                opposite_direction = 'up'
+            
+            opposite_direction = util.get_opposite(direction)
             
             if row == 'top':
                 real_direction = direction

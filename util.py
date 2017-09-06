@@ -45,3 +45,7 @@ def color_face(face):
     pieces = face.return_all()
     text = ""
  
+def get_opposite(direction):
+    
+    opposite_dict = { 'right': 'left', 'left': 'right', 'up': 'down', 'down': 'up' }
+    return opposite_dict[direction]
