@@ -29,7 +29,7 @@ A solved (or untouched) gearball will look like this:
 
 and a gearball with one move executed (a left move up while holding center) will look like this:
 
-![screenshot](https://raw.githubusercontent.com/thingscouldbeworse/robitcptkrrk/master/1move_example.png)
+![screenshot](https://raw.githubusercontent.com/thingscouldbeworse/gearball/master/1move_example.png)
 
 ## Data Structure
 
