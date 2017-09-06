@@ -25,24 +25,11 @@ The central face (the one at the center of the "cross" formed by unfolding the g
 
 A solved (or untouched) gearball will look like this:
 
-```
-     1
-    ▆▆▆
-    ▆▆▆
-    ▆▆▆
- 1   1   1
-▆▆▆ ▆▆▆ ▆▆▆
-▆▆▆1▆▆▆1▆▆▆
-▆▆▆ ▆▆▆ ▆▆▆
- 1   1   1
-    ▆▆▆
-    ▆▆▆
-    ▆▆▆
-     1
-    ▆▆▆
-   1▆▆▆1
-    ▆▆▆
-```
+![screenshot](https://raw.githubusercontent.com/thingscouldbeworse/gearball/master/solved_example.png)
+
+and a gearball with one move executed (a left move up while holding center) will look like this:
+
+![screenshot](https://raw.githubusercontent.com/thingscouldbeworse/robitcptkrrk/master/1move_example.png)
 
 ## Data Structure
 
@@ -56,5 +43,10 @@ The `piece` object knows its own color and possesses a function to change its co
 
 As move operations are performed on the central face, rows in adjacent faces have their pieces change color accordingly. Pieces never move position only color, and always belong to their original face. Gears will change position and orientation as needed.
 
+## Randomizer
+
+## Heuristic
+
+## Statement
 
 
