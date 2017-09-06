@@ -59,4 +59,7 @@ def randomize(num_moves):
         our_ball.move(row, direction, hold)
         our_ball.output_ball() 
 
-randomize(20)   
+if len(sys.argv) < 2:
+    print("Usage: 'python run.py [number of random moves to generate]")
+else:
+    randomize(int(sys.argv[1]))
