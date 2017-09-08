@@ -106,6 +106,7 @@ def randomize_quick(num_moves):
                 temp_ball_2.rotate(possible_rotations[i])
             elif i > 3:
                 temp_ball_2.rotate(possible_rotations[i-4])
+                temp_ball_2.rotate(possible_rotations[i-4])
             previous_rotation_states[i] = temp_ball.rows
         
         our_ball = copy.deepcopy(temp_ball)
