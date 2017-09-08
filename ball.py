@@ -69,6 +69,7 @@ class ball:
         self.rows.append("    " + row1)
         self.rows.append("   " + self.gears['6b'].text + row2 + self.gears['6a'].text)
         self.rows.append("    " + row3)
+        self.rows.append("\n")
 
     def append_row_with_space(self, row_number):
 
@@ -83,9 +84,11 @@ class ball:
         for row in self.rows:
             print(row)
  
-    def move(self, row, direction, hold):
-        
-        print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
+    def move(self, row, direction, hold, verbose=True):
+       
+        if verbose:
+            print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
+
         real_direction = 'none'
         if hold == 'center':
             
