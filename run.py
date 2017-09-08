@@ -95,10 +95,11 @@ def randomize_quick(num_moves):
             for rotation_state in previous_rotation_states:
                 if temp_ball.rows == rotation_state:
                     done = False
+                    print("rotate")
                     break
 
         previous_state = our_ball.rows
-        # stash the 4 possible rotation states to compare against
+        # stash the 6 possible rotation states to compare against
         for i in range(0,6):
             temp_ball_2 = copy.deepcopy(our_ball)
             if i < 4:
