@@ -3,6 +3,7 @@ from ball import ball
 from ball_components import face, piece, gear
 import util
 import sys
+import copy
 
 possible_moves = {
                 'top': {
@@ -35,21 +36,21 @@ def randomize_state(num_moves):
         # a sequence that involves undoing a previous move, or a move that will
         # result in a 90 degree rotation of the ball (functionally undoing)
 
-        possible_balls = build_possible_state_branch(our_ball)
+        possible_ball_states = build_possible_state_branch(our_ball)
 
         # if any of the possible moves generated would return us to the previous
         # state remove them from the pool of possible moves
         bad_move = -1
-        for i in range(0, len(possible_balls)):
-            if possible_balls[i].rows == previous_state:
+        for i in range(0, len(possible_ball_states)):
+            if possible_ball_states[i].rows == previous_state:
                 bad_move = i
         
         if bad_move != -1:
-            del possible_balls[bad_move]
+            del possible_ball_states[bad_move]
 
-        chosen_move = randint(0, len(possible_balls)-1)
+        chosen_move = randint(0, len(possible_ball_states)-1)
         previous_state = our_ball.rows
-        our_ball = possible_balls[chosen_move]
+        our_ball = possible_ball_states[chosen_move]
 
         our_ball.output_ball() 
 
@@ -95,16 +96,16 @@ def randomize_quick(num_moves):
 
 def build_possible_state_branch(our_ball):
     
-    # "state" is actually just the string representation of the ball
-    # we hold on to the ball objects anyway so we can choose one
+    # "state" is actually just the string list representation of the ball
     possible_states = []
+    temp_ball = ball()
     for row in possible_moves:
         for direction in possible_moves[row]:
             for hold in possible_moves[row][direction]:
-                new_ball = ball()
-                new_ball.move(row, direction, hold, verbose=False)
-                new_ball.textify_rows()
-                possible_states.append(new_ball)
+                temp_ball = copy.deepcopy(our_ball)
+                temp_ball.move(row, direction, hold, verbose=False)
+                temp_ball.textify_rows()
+                possible_states.append(temp_ball)
 
     return possible_states 
     
