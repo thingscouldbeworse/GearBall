@@ -5,18 +5,20 @@ import util
 import sys
 import copy
 
+# 8 moves are equivalents of each other (top right center is 
+# equivalent of bottom left center) so we can remove those options
 possible_moves = {
                 'top': {
                     'right': ['center', 'bottom'],
                     'left': ['center', 'bottom']
                     },
                 'bottom': {
-                    'right': ['center', 'top'],
-                    'left': ['center', 'top']
+                    'right': ['top'],
+                    'left': ['top']
                     },
                 'right': {
-                    'up': ['center', 'left'],
-                    'down': ['center', 'left']
+                    'up': ['left'],
+                    'down': ['left']
                     },
                 'left': {
                     'up': ['center', 'right'],
@@ -60,37 +62,30 @@ def randomize_quick(num_moves):
     
     our_ball = ball()
     our_ball.output_ball()
+    previous_state = [""]
     
     for i in range(0, num_moves):
-        # we start with all possible moves,
-        # but the randomizer will not produce
-        # a sequence that involves undoing a previous move 
-        
-        if i > 0:
-            previous_hold = hold
-            previous_direction = direction
-            previous_row = row
-            opposite_direction = util.get_opposite(direction)
-        else:
-            previous_hold = ''
-            previous_row = ''
-
+                
         done = False
-
+        
+        temp_ball = copy.deepcopy(our_ball)
         while not done:
-            key_index = randint(0,3)
+            key_index = randint(0,len(possible_moves)-1)
             row = (list(possible_moves.keys()))[key_index]
             possible_move_subset = possible_moves[row]
-            direction = (list(possible_move_subset.keys()))[randint(0,1)]
+            direction = (list(possible_move_subset.keys()))[randint(0,len(possible_move_subset)-1)]
             possible_move_subset = possible_move_subset[direction]
-            hold = possible_move_subset[randint(0,1)]
-            
-            if row == previous_row and hold == previous_hold and direction == opposite_direction:
+            hold = possible_move_subset[randint(0,len(possible_move_subset)-1)]
+           
+            temp_ball.move(row, direction, hold, verbose=False)
+            temp_ball.textify_rows()
+
+            if temp_ball.rows == previous_state: 
                 done = False
             else:
                 done = True
- 
-        our_ball.move(row, direction, hold)
+        previous_state = our_ball.rows 
+        our_ball = copy.deepcopy(temp_ball)
         our_ball.output_ball() 
 
 
