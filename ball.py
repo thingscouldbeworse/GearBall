@@ -281,6 +281,17 @@ class ball:
             face.pieces['top'] = copy.deepcopy(face.pieces['left'])
             face.pieces['left'] = copy.deepcopy(face.pieces['bottom'])
             face.pieces['bottom'] = copy.deepcopy(temp_piece)
+    
+    # direction is right/up/left/down
+    # a rotation is actually a hold opposite + hold center
+    def rotate(self, direction):
+        
+        if direction == 'left' or direction == 'right':
+            self.move('top', direction, 'bottom', verbose=False)
+            self.move('bottom', direction, 'center', verbose=False)
+        elif direction == 'up' or direction == 'down':
+            self.move('left', direction, 'right', verbose=False)
+            self.move('right', direction, 'left', verbose=False)
 
 def move_row_pieces(first, second, row, axis = 'x'):
 

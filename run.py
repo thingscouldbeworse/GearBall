@@ -25,6 +25,12 @@ possible_moves = {
                     'down': ['center', 'right']
                     }
                 }
+possible_rotations = [
+                    'right',
+                    'left',
+                    'up',
+                    'down'
+                    ]
 
 # randomize by building state branches and choosing a state. Slow.
 def randomize_state(num_moves):
@@ -63,6 +69,7 @@ def randomize_quick(num_moves):
     our_ball = ball()
     our_ball.output_ball()
     previous_state = [""]
+    previous_rotation_states = [""] * 4
     
     for i in range(0, num_moves):
                 
@@ -80,11 +87,23 @@ def randomize_quick(num_moves):
             temp_ball.move(row, direction, hold, verbose=False)
             temp_ball.textify_rows()
 
-            if temp_ball.rows == previous_state: 
+            if temp_ball.rows == previous_state:
                 done = False
             else:
                 done = True
-        previous_state = our_ball.rows 
+
+            for rotation_state in previous_rotation_states:
+                if temp_ball.rows == rotation_state:
+                    done = False
+
+        previous_state = our_ball.rows
+        temp_ball_2 = copy.deepcopy(our_ball)
+        # stash the 4 possible rotation states to compare against  
+        for i in range(0,4):
+            temp_ball_2 = copy.deepcopy(our_ball)
+            temp_ball_2.rotate(possible_rotations[i])
+            previous_rotation_states[i] = temp_ball.rows
+        
         our_ball = copy.deepcopy(temp_ball)
         our_ball.output_ball() 
 
@@ -108,13 +127,13 @@ def main():
     if len(sys.argv) < 2 or len(sys.argv) >= 6:
         print("Usage: ")
         print("         python run.py [number of random moves to generate]")
-        print("         python run.py [number of random moves to generate] [quickly]")
+        print("         python run.py [number of random moves to generate] [state]")
         print("         python run.py [row to move] [direction] [row to hold]")
         print("         python run,py [row to move] [direction] [row to hold] [quit after execute, don't wait for more input]")
     elif len(sys.argv) == 2:
-        randomize_state(int(sys.argv[1]))
-    elif len(sys.argv) == 3:
         randomize_quick(int(sys.argv[1]))
+    elif len(sys.argv) == 3:
+        randomize_state(int(sys.argv[1]))
     elif len(sys.argv) > 3 and len(sys.argv) < 6:
         our_ball = ball()
         our_ball.output_ball()
