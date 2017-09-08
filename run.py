@@ -69,7 +69,7 @@ def randomize_quick(num_moves):
     our_ball = ball()
     our_ball.output_ball()
     previous_state = [""]
-    previous_rotation_states = [""] * 8
+    previous_rotation_states = [""] * 6
     
     for i in range(0, num_moves):
                 
@@ -98,9 +98,8 @@ def randomize_quick(num_moves):
                     break
 
         previous_state = our_ball.rows
-        temp_ball_2 = copy.deepcopy(our_ball)
-        # stash the 4 possible rotation states to compare against  
-        for i in range(0,8):
+        # stash the 4 possible rotation states to compare against
+        for i in range(0,6):
             temp_ball_2 = copy.deepcopy(our_ball)
             if i < 4:
                 temp_ball_2.rotate(possible_rotations[i])
@@ -108,7 +107,7 @@ def randomize_quick(num_moves):
                 temp_ball_2.rotate(possible_rotations[i-4])
                 temp_ball_2.rotate(possible_rotations[i-4])
             previous_rotation_states[i] = temp_ball.rows
-        
+
         our_ball = copy.deepcopy(temp_ball)
         our_ball.output_ball() 
 
