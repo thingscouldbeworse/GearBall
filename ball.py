@@ -288,10 +288,14 @@ class ball:
         
         if direction == 'left' or direction == 'right':
             self.move('top', direction, 'bottom', verbose=False)
+            self.textify_rows()
             self.move('bottom', direction, 'center', verbose=False)
+            self.textify_rows()
         elif direction == 'up' or direction == 'down':
             self.move('left', direction, 'right', verbose=False)
+            self.textify_rows()
             self.move('right', direction, 'left', verbose=False)
+            self.textify_rows()
 
 def move_row_pieces(first, second, row, axis = 'x'):
 
