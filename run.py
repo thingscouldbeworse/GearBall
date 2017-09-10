@@ -68,7 +68,7 @@ def randomize_quick(num_moves):
     
     our_ball = ball()
     our_ball.output_ball()
-    previous_state = [""]
+    previous_ball = ball()
     previous_rotation_states = [""] * 6
     
     for i in range(0, num_moves):
@@ -83,11 +83,11 @@ def randomize_quick(num_moves):
             direction = (list(possible_move_subset.keys()))[randint(0,len(possible_move_subset)-1)]
             possible_move_subset = possible_move_subset[direction]
             hold = possible_move_subset[randint(0,len(possible_move_subset)-1)]
-           
-            temp_ball.move(row, direction, hold, verbose=False)
+
+            output = temp_ball.move(row, direction, hold, verbose=False)
             temp_ball.textify_rows()
 
-            if temp_ball.rows == previous_state:
+            if temp_ball.rows == previous_ball.rows:
                 done = False
             else:
                 done = True
@@ -98,7 +98,6 @@ def randomize_quick(num_moves):
                     print("rotate")
                     break
 
-        previous_state = our_ball.rows
         # stash the 6 possible rotation states to compare against
         for i in range(0,6):
             temp_ball_2 = copy.deepcopy(our_ball)
@@ -109,7 +108,9 @@ def randomize_quick(num_moves):
                 temp_ball_2.rotate(possible_rotations[i-4])
             previous_rotation_states[i] = temp_ball.rows
 
+        previou_ball = copy.deepcopy(our_ball)
         our_ball = copy.deepcopy(temp_ball)
+        print(output)
         our_ball.output_ball() 
 
 
@@ -122,7 +123,7 @@ def build_possible_state_branch(our_ball):
         for direction in possible_moves[row]:
             for hold in possible_moves[row][direction]:
                 temp_ball = copy.deepcopy(our_ball)
-                temp_ball.move(row, direction, hold, verbose=False)
+                output = temp_ball.move(row, direction, hold, verbose=False)
                 temp_ball.textify_rows()
                 possible_states.append(temp_ball)
 
@@ -132,7 +133,6 @@ def main():
     if len(sys.argv) < 2 or len(sys.argv) >= 6:
         print("Usage: ")
         print("         python run.py [number of random moves to generate]")
-        print("         python run.py [number of random moves to generate] [state]")
         print("         python run.py [row to move] [direction] [row to hold]")
         print("         python run,py [row to move] [direction] [row to hold] [quit after execute, don't wait for more input]")
     elif len(sys.argv) == 2:

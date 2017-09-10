@@ -88,6 +88,8 @@ class ball:
        
         if verbose:
             print("Moving the " + row + " row " + direction + " while holding the " + hold + " row.")
+        else:
+            output = "Moving the " + row + " row " + direction + " while holding the " + hold + " row."
 
         real_direction = 'none'
         if hold == 'center':
@@ -161,6 +163,9 @@ class ball:
             self.rotate_edge('4', real_direction)
 
             self.full_gear_update(increment, 'z')
+
+        if not verbose:
+            return output
          
 
     def full_row_move(self, row, direction):

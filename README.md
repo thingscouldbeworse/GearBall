@@ -60,6 +60,11 @@ As move operations are performed on the central face, rows in adjacent faces hav
 
 ## Randomizer
 
+The `randomize()` function takes a number of moves as an argument, creates a gearball object, and scrambles it by generating sequential moves (up to the number passed to the function). This is accomplished by generating 3 random numbers, first to decide on a random row to move, then to decide a random direction, and finally a random row to hold. There are 16 "possible moves" (four rows, two directions, two holds, 4 * 2 * 2) but 8 of these moves are equivalent (`top left center` is equivalent to `bottom right center`) so 4 moves are removed from the possible moveset to avoid duplicates. 
+
+The `randomize()` function also will not produce an "undo" move, moves that either directly return to the n-2 state (a 'top, right, center' move will not be immediately preceded by a 'top, left, center' move) or moves that would constitute a 90 or 180 degree turn (a 'top, right, bottom' and 'bottom, right, center' would simply result in the gearball being turned 90 degrees to the right). This is accomplished by storing the previous states of the gearball just before each move is taken and persisting this into the next iteration of the loop that chooses moves. A move is chosen (via  generating random numbers for th row, direction, and hold) and a temporary gear ball created from the state of the current gearball is moved according to the randomly chosen move. This temporary gearball's state (the string representation) is compared to the previous gearball's state and if they are equivalent, a new random move is generated. Simmilarly, before a move is executed the rotation states are saved (6 rotation states, 2 180 degree rotations on the x and y axis, 4 90 degree rotations towards 'up', 'left', 'right', 'down') and next iteration the possible move is compared against these possible rotations states, and a new random move is chosen if one is equal.
+
+
 ## Heuristic
 
 ## Statement
