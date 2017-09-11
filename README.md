@@ -67,6 +67,11 @@ The `randomize()` function also will not produce an "undo" move, moves that eith
 
 ## Heuristic
 
+An 'edge' piece (the inside pieces that are neither corners nor gears) or 'corner' piece can be at most 8 steps away from its correct position, 6 moves to the opposite face of the gearball, two moves to flip to the other side of that face (a 'right' to a 'left', a 'top' to a 'bottom'). There are 4 edges and corners per face and 6 faces for total Manhattan Distance of 8 * 4 * 6 = 192. However, as any edge or corner moves it also moves the 4 edges and corners within its row around the other faces, and rotates the 4 edges and corners on the slice of gearball being moved, and moves the 8 edge pieces and corners on the center row or the 8 edge pieces on the reverse side of the gearball, so the true Manhattan Distance would be 192/16 = 12. The gears can be at most 6 moves away from solved, as they require 12 moves from solved to return back to solved. The 4 central gears move with every move but the gears on each edge being moved do not, so the true Manhattan Distance for gears is 12/4 = 3. 
+
 ## Statement
 
+I had never heard of or considered A\* algorithms prior to this assignment, although I did know and had used search trees and algorithms for traversing them. Learning A\* and the considerations taken for how to construct reliable datastructures for the priority queue, how to pick a search algorithm, and how to find a heuristic gave me a more concrete understanding of the applications for the various algorithms and data structures I had learned previously. While in classes we would be tested on DFS and BFS I didn't really have a direct need to use them in a program. 
+
+Generally, I also learned better strategies for starting to model something relatively complex. Whenever I started to work on the gearball representation after trying to "think through it" or come up with what I needed in an abstract sense I would have trouble actually implementing it through code. Instead, I drew up some very simple initial data structures and began coding behavior through many repetetive 'if' statements, and then later after understanding the patterns I was writing out over and over I could go back and collapse many lines of individual logic into general utility functions.
 
