@@ -70,8 +70,6 @@ def randomize_quick(num_moves):
     our_ball.output_ball()
     previous_rotation_states = [""] * 6
     previous_state = ""
-    previous_row = ""
-    previous_hold = ""
     
     for i in range(0, num_moves):
                 
