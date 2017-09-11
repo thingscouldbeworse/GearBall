@@ -299,7 +299,7 @@ class ball:
         elif direction == 'up' or direction == 'down':
             self.move('left', direction, 'right', verbose=False)
             self.textify_rows()
-            self.move('right', direction, 'left', verbose=False)
+            self.move('right', direction, 'center', verbose=False)
             self.textify_rows()
 
 def move_row_pieces(first, second, row, axis = 'x'):
