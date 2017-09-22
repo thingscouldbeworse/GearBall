@@ -1,4 +1,5 @@
 import re 
+import math
 
 COLORS = dict(
         list(zip([
@@ -49,3 +50,15 @@ def get_opposite(direction):
     
     opposite_dict = { 'right': 'left', 'left': 'right', 'up': 'down', 'down': 'up' }
     return opposite_dict[direction]
+
+def get_opposing_face(face_num):
+    if face_num == 1:
+        return 5
+    elif face_num == 2:
+        return 4
+    elif face_num == 3:
+        return 6
+
+def distance(p0, p1):
+    return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
+

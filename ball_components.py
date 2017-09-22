@@ -19,6 +19,11 @@ class face:
                 'bottom': piece(color, 'bottom'),
                 'center': piece(color, 'center')
                 }
+        self.pieces_by_grid = [
+                [self.pieces['top_left'], self.pieces['left'], self.pieces['bottom_left']],
+                [self.pieces['top'], self.pieces['center'], self.pieces['bottom']],
+                [self.pieces['top_right'], self.pieces['right'], self.pieces['bottom_right']]
+                ]
         self.position = position
         self.color = color
 
