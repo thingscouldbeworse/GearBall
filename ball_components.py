@@ -19,13 +19,26 @@ class face:
                 'bottom': piece(color, 'bottom'),
                 'center': piece(color, 'center')
                 }
-        self.pieces_by_grid = [
-                [self.pieces['top_left'], self.pieces['left'], self.pieces['bottom_left']],
-                [self.pieces['top'], self.pieces['center'], self.pieces['bottom']],
-                [self.pieces['top_right'], self.pieces['right'], self.pieces['bottom_right']]
-                ]
         self.position = position
         self.color = color
+
+    def pieces_by_grid(self, x, y):
+        reference = ""
+        if y != 1 and x != 1:
+            reference = "_"
+        if x == 0:
+            reference = reference + "left"
+        elif x == 2:
+            reference = reference + "right"
+        if y == 0:
+            reference = "top" + reference
+        elif y == 2:
+            reference = "bottom" + reference
+        elif x == 1 and y == 1:
+            reference = "center"
+
+        return self.pieces[reference]
+
 
     def return_individual(self, piece):
         return self.pieces[piece]
@@ -72,8 +85,9 @@ class piece:
     text = '▆'
     def __init__(self, color, style):
         self.color = color
-        self.type = style
+        self.style = style
         self.text = util.color_sub(color, self.text)
+        self.change_color(color)
 
     def change_color(self, new_color):
         self.text = util.color_sub(new_color, self.text)
