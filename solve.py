@@ -7,9 +7,9 @@ def hs(this_ball):
     total_distance = 0
     for x in range(1,4):
         for y in range(1,4):
-            total_distance = total_distance + piece_distance(x, y, 0, threedee)
-            total_distance = total_distance + piece_distance(x, 0, y, threedee)
-            total_distance = total_distance + piece_distance(0, x, y, threedee)
+            total_distance = total_distance + piece_distance2(x, y, 0, threedee)
+            total_distance = total_distance + piece_distance2(x, 0, y, threedee)
+            total_distance = total_distance + piece_distance2(0, x, y, threedee)
     for gear in this_ball.gears:
         total_distance = total_distance + this_ball.gears[gear].orientation - 1
     return total_distance
@@ -54,8 +54,15 @@ def create_3d_ball(this_ball):
     
     return threedee
 
-def piece_distance(x, y, z, threedee):
+def piece_distance2(x, y, z, threedee):
 
+    piece1 = threedee[x][y][z]
+    match_center = find_center_by_color_3d(piece1.color, threedee)
+    return util.distance(match_center, [x,y,z])
+
+def piece_distance(x, y, z, threedee):
+    
+    print(" " + str(x) + ", " + str(y) + ", " + str(z))
     piece1 = threedee[x][y][z]
     match_center = find_center_by_color_3d(piece1.color, threedee)
     target_coords = [-1,-1,-1]
@@ -112,14 +119,16 @@ def piece_distance(x, y, z, threedee):
             target_coords[2] = 3
         else:
             target_coords[2] = 2
+    print( target_coords)
     return util.distance([x,y,z], target_coords)
 
 
+
 our_ball = ball()
-our_ball.move('top', 'left', 'center')
-our_ball.move('left', 'up', 'center')
-our_ball.output_ball()
-print(hs(our_ball))
+#our_ball.move('top', 'left', 'center')
+#our_ball.move('bottom', 'left', 'top')
+#our_ball.output_ball()
+#print(hs(our_ball))
 #threedee = create_3d_ball(our_ball)
 #print(piece_distance(1,2,0,threedee))
 
