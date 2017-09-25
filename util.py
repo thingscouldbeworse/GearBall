@@ -62,3 +62,6 @@ def get_opposing_face(face_num):
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
+def style_to_coords(style):
+    plcae = ""
+
