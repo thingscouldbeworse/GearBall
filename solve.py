@@ -2,12 +2,17 @@ from ball import ball
 import util
 from pprint import pprint
 
-# return the maximum number of turns for the pieces
-# of a ball away from a solved state
-def calc_max_dist(our_ball):
-    for face in our_ball.faces:
-        for piece in our_ball.faces[face].pieces:
-            print(our_ball.faces[face].pieces[piece].text)
+def hs(this_ball):
+    threedee = create_3d_ball(this_ball)
+    total_distance = 0
+    for x in range(1,4):
+        for y in range(1,4):
+            total_distance = total_distance + piece_distance(x, y, 0, threedee)
+            total_distance = total_distance + piece_distance(x, 0, y, threedee)
+            total_distance = total_distance + piece_distance(0, x, y, threedee)
+    for gear in this_ball.gears:
+        total_distance = total_distance + this_ball.gears[gear].orientation - 1
+    return total_distance
 
 def find_center_by_color(color, ball):
     for face in ball.faces:
@@ -41,7 +46,7 @@ def create_3d_ball(this_ball):
 
     for x in range(0,3):
         for y in range(0,3):
-            threedee[x+1][y+1][0] = this_ball.faces['face_1'].pieces_by_grid(x, 2-y)
+            threedee[x+1][y+1][0] = this_ball.faces['face_1'].pieces_by_grid(y, 2-x)
     
     for x in range(0,3):
         for y in range(0,3):
@@ -82,6 +87,10 @@ def piece_distance(x, y, z, threedee):
     elif i == 0: # faces 3 and 6
         if "left" in piece1.style:
             target_coords[1] = 1
+        elif "right" in piece1.style:
+            target_coords[1] = 3
+        else:
+            target_coords[1] = 2
        
     # top and bottom
     if i == 2:
@@ -90,10 +99,12 @@ def piece_distance(x, y, z, threedee):
             target_coords[0] = 3
         elif "top" in piece1.style and match_center[2] == 4:
             target_coords[0] = 1
-        if "bottom" in piece1.style and match_center[2] == 0:
+        elif "bottom" in piece1.style and match_center[2] == 0:
             target_coords[0] = 1
         elif "bottom" in piece1.style and match_center[2] == 4:
             target_coords[0] = 3
+        else:
+            target_coords[0] = 2
     else:
         if "top" in piece1.style:
             target_coords[2] = 1
@@ -101,11 +112,15 @@ def piece_distance(x, y, z, threedee):
             target_coords[2] = 3
         else:
             target_coords[2] = 2
-    print(target_coords)
+    return util.distance([x,y,z], target_coords)
+
 
 our_ball = ball()
 our_ball.move('top', 'left', 'center')
 our_ball.move('left', 'up', 'center')
 our_ball.output_ball()
-threedee = create_3d_ball(our_ball)
-piece_distance(0,1,1,threedee)
+print(hs(our_ball))
+#threedee = create_3d_ball(our_ball)
+#print(piece_distance(1,2,0,threedee))
+
+
